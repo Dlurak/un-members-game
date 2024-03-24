@@ -7,7 +7,7 @@ import { QuestionBox } from './components/QuestionBox'
 function App() {
   return (
 	<>
-		<Map />
+		<Map onClick={(country) => window.alert(country)} />
 		<QuestionBox flag="https://flagcdn.com/de.svg" country="Germany" capital="Berlin" />
 	</>
   ) 
