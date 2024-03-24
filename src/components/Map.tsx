@@ -1,30 +1,55 @@
 import "react";
-import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
-import { getCountry } from "../utils/coordinates/getCountry";
+import { useEffect, useRef, useState } from "react";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 interface MapProps {
   onClick: (country: string) => void;
 }
 
-const MapHandler: React.FC<MapProps> = ({ onClick }) => {
-  useMapEvents({
-    click: (e) => {
-      getCountry(e.latlng)
-        .then(onClick)
-        .catch(() => {});
-    },
-  });
+export const Map: React.FC<MapProps> = ({ onClick }) => {
+  const element = useRef<HTMLDivElement | null>(null);
+  const [vectorGraphic, setVectorGraphic] = useState<string | null>(null);
 
-  return null;
+  useEffect(() => {
+    fetch("/world.svg")
+      .then((r) => r.text())
+      .then(setVectorGraphic);
+  }, []);
+
+  useEffect(() => {
+    if (!vectorGraphic) return;
+    if (!element.current) return;
+
+    element.current.innerHTML = vectorGraphic;
+    element.current.getElementsByTagName("svg")[0].style.width = "100%";
+    element.current.getElementsByTagName("svg")[0].style.height = "auto";
+
+    element.current.querySelectorAll("path").forEach((path) => {
+      path.addEventListener("click", () => {
+        const name = path.getAttribute("class") || path.getAttribute("name");
+        if (!name) return;
+
+        onClick(name);
+      });
+    });
+  }, [vectorGraphic, element]);
+
+  return (
+    <div>
+      <TransformWrapper>
+        <TransformComponent>
+          <div
+            style={{
+              height: "100vh",
+              width: "100%",
+			  paddingTop: "1rem",
+              padding: "4rem",
+            }}
+          >
+            <div ref={element} style={{ width: "100%", height: "100%" }} />;
+          </div>
+        </TransformComponent>
+      </TransformWrapper>
+    </div>
+  );
 };
-
-export const Map: React.FC<MapProps> = ({ onClick }) => (
-  <MapContainer center={[0, 0]} zoom={2} maxZoom={7} minZoom={2}>
-    <TileLayer
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    />
-
-    <MapHandler onClick={onClick} />
-  </MapContainer>
-);
