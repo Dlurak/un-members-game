@@ -19,7 +19,7 @@ const MapHandler: React.FC<MapProps> = ({ onClick }) => {
 };
 
 export const Map: React.FC<MapProps> = ({ onClick }) => (
-  <MapContainer center={[0, 0]} zoom={2} maxZoom={7}>
+  <MapContainer center={[0, 0]} zoom={2} maxZoom={7} minZoom={2}>
     <TileLayer
       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
