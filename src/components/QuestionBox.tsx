@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Button } from "./Button";
 import { Time } from "./Time";
 import { Information } from "./Box/Information";

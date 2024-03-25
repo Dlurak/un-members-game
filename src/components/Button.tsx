@@ -1,5 +1,3 @@
-import * as React from "react";
-
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
