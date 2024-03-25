@@ -5,6 +5,9 @@ interface QuestionBoxProps {
 	flag: string;
 	country: string;
 	capital: string;
+
+	onSkip: () => void;
+	onPause: () => void;
 }
 
 export const QuestionBox: React.FC<QuestionBoxProps> = (props) => {
@@ -53,8 +56,8 @@ export const QuestionBox: React.FC<QuestionBoxProps> = (props) => {
 					justifyContent: "space-evenly",
 					alignItems: "center",
 				}}>
-					<Button>Skip</Button>
-					<Button>Pause</Button>
+					<Button onClick={props.onSkip}>Skip</Button>
+					<Button onClick={props.onPause}>Pause</Button>
 				</div>
 			</div>
 		</div>

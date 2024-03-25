@@ -18,11 +18,11 @@ function App() {
     });
   }, []);
 
-  const incrementScore = (country: string, status: Status) => {
+  const incrementScore = (country: string, status: Status, amount = 1) => {
     const countryScore = scores[country]?.tries || 0;
     const scoreCopy = { ...scores };
     scoreCopy[country] = {
-		tries: countryScore + 1,
+		tries: countryScore + amount,
 		status
 	};
     setScores(scoreCopy);
@@ -48,6 +48,13 @@ function App() {
         country={countries[0]?.name.common}
         capital={countries[0].capital[0]}
         flag={countries[0].flags.svg}
+		onSkip={() =>{
+			const [first, ...rest] = countries;	
+			setCountries([...rest, first]);
+			incrementScore(countries[0].name.common, "skipped", 0);
+			console.log(scores)
+		}}
+		onPause={() =>{}}
       />
     </>
   );
