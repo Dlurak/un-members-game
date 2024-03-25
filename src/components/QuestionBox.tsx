@@ -1,65 +1,32 @@
-import * as React from 'react';
-import { Button } from './Button';
+import * as React from "react";
+import { Button } from "./Button";
+import { Time } from "./Time";
+import { Information } from "./Box/Information";
+import { Box } from "./Box/Box";
 
 interface QuestionBoxProps {
-	flag: string;
-	country: string;
-	capital: string;
+  flag: string;
+  country: string;
+  capital: string;
 
-	onSkip: () => void;
-	onPause: () => void;
+  startTimestamp: number;
+
+  onSkip: () => void;
 }
 
 export const QuestionBox: React.FC<QuestionBoxProps> = (props) => {
-	return (
-		<div style={{
-			position: 'absolute',
-			zIndex: 1000,
-			bottom: "50px",
-			left: "50%",
-			transform: "translateX(-50%)",
+  return (
+    <Box>
+      <Information
+        flag={props.flag}
+        country={props.country}
+        capital={props.capital}
+      />
 
-			width: "90%",
-			background: "rgba(255, 255, 255, 0.5)",
-			backdropFilter: "blur(10px)",
-			borderRadius: "0.5rem",
-
-			display: "flex",
-			justifyContent: "space-evenly",
-			alignItems: "center",
-			paddingBlock: "2rem",
-			paddingInline: "2rem",
-			outline: "1px solid #a1a1aa",
-		}}>
-			<div style={{
-				width: "100%",
-				display: "flex",
-				justifyContent: "space-evenly",
-			}}>
-				<img src={props.flag} alt="flag" style={{width: "15%", height: "auto"}} />
-				<div>
-					<h3>{props.country}</h3>
-					<p>{props.capital}</p>
-				</div>
-			</div>
-
-			<div style={{
-				display: "grid",
-				justifyItems: "center",
-				gap: "1rem",
-				width: "100%",
-				height: "100%",
-			}}>
-				<div style={{
-					display: "flex",
-					width: "75%",
-					justifyContent: "space-evenly",
-					alignItems: "center",
-				}}>
-					<Button onClick={props.onSkip}>Skip</Button>
-					<Button onClick={props.onPause}>Pause</Button>
-				</div>
-			</div>
-		</div>
-	)
-}
+      <span className="w-full flex justify-evenly items-center gap-2">
+        <Button onClick={props.onSkip}>Skip</Button>
+        <Time startTimestamp={props.startTimestamp} />
+      </span>
+    </Box>
+  );
+};

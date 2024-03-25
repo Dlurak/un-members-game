@@ -74,12 +74,12 @@ function App() {
         country={countries[0]?.name.common}
         capital={countries[0].capital[0]}
         flag={countries[0].flags.svg}
+		startTimestamp={startTimestamp!}
         onSkip={() => {
           const [first, ...rest] = countries;
           setCountries([...rest, first]);
           incrementScore(countries[0].name.common, "skipped", 0);
         }}
-        onPause={() => {}}
       />
     </>
   );
