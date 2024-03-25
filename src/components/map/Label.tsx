@@ -105,6 +105,7 @@ export const Label: React.FC<LabelProps> = ({ geo }) => {
             alignmentBaseline="middle"
             fontSize={calculatedFontSize}
             fill="#000"
+			pointerEvents="none"
           >
             {geo.properties.name}
           </text>

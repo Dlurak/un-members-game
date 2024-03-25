@@ -22,5 +22,6 @@ export async function getCountries() {
     "https://restcountries.com/v3.1/independent?status=true&fields=name,flags,capital",
   ).then((r) => r.json());
 
-  return responseSchema.parse(data);
+  return responseSchema.parse(data)
+		.filter(c => ["Italy", "San Marino", "Germany"].includes(c.name.common));
 }
