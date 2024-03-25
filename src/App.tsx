@@ -50,6 +50,7 @@ function App() {
             setStatus("playing");
           });
         }}
+		scores={scores}
         gameStartTimestamp={startTimestamp!}
       />
     );

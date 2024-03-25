@@ -81,12 +81,14 @@ const Polygon: React.FC<MapPartFeature> = ({
           fill: bgColor,
           stroke: "#000",
           strokeWidth: 0.1,
+		  outline: "none"
         },
         hover: {
           fill: darken(bgColor, 15),
           stroke: "#000",
           strokeWidth: 0.1,
           cursor: getCursor(getName(geo)),
+		  outline: "none"
         },
       }}
     />
