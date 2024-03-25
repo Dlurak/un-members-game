@@ -229,7 +229,7 @@
           "type": "Polygon",
           "arcs": [[203, 204, 205, 206, -70, 207]],
           "id": "CIV",
-          "properties": { "name": "Cote d'Ivoire" }
+          "properties": { "name": "Ivory Coast" }
         },
         {
           "type": "Polygon",
@@ -252,7 +252,7 @@
           "type": "Polygon",
           "arcs": [[-12, 227, 228, -216, -128, -225]],
           "id": "COG",
-          "properties": { "name": "Congo" }
+          "properties": { "name": "Republic Of Congo" }
         },
         {
           "type": "Polygon",

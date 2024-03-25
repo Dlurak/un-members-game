@@ -1,6 +1,11 @@
 import React from "react";
 import { Score } from "../../types";
-import { DEFAULT_BG_COLOR, getBackgroundColor } from "../../utils/colors/score";
+import {
+  CORRECT_BG_COLOR,
+  DEFAULT_BG_COLOR,
+  INCORRECT_BG_COLOR,
+  WARNING_BG_COLOR,
+} from "../../utils/colors/score";
 import { Geography, Marker } from "react-simple-maps";
 import { z } from "zod";
 import { darken } from "../../utils/colors/darken";
@@ -39,16 +44,18 @@ type MapFeatureBase<T> = {
 };
 
 type MapFeature = MapFeatureBase<any>;
-type MapPartFeature = MapFeatureBase<Geo>;
 
-const Polygon: React.FC<MapPartFeature> = ({ geo, scores, onClick }) => {
+type MapPartFeature = MapFeatureBase<Geo> & {
+  bgColor: string;
+};
+
+const Polygon: React.FC<MapPartFeature> = ({
+  geo,
+  scores,
+  onClick,
+  bgColor,
+}) => {
   const getScore = (countryName: string) => scores[countryName] as Score | null;
-
-  const getBgColor = (countryName: string) => {
-    const score = getScore(countryName);
-
-    return score ? getBackgroundColor(score) : DEFAULT_BG_COLOR;
-  };
 
   const getCursor = (countryName: string) => {
     const score = getScore(countryName);
@@ -71,12 +78,12 @@ const Polygon: React.FC<MapPartFeature> = ({ geo, scores, onClick }) => {
       }}
       style={{
         default: {
-          fill: getBgColor(getName(geo)),
+          fill: bgColor,
           stroke: "#000",
           strokeWidth: 0.1,
         },
         hover: {
-          fill: darken(getBgColor(getName(geo)), 15),
+          fill: darken(bgColor, 15),
           stroke: "#000",
           strokeWidth: 0.1,
           cursor: getCursor(getName(geo)),
@@ -86,16 +93,8 @@ const Polygon: React.FC<MapPartFeature> = ({ geo, scores, onClick }) => {
   );
 };
 
-const Point: React.FC<MapPartFeature> = ({ geo, scores, onClick }) => {
+const Point: React.FC<MapPartFeature> = ({ geo, onClick, bgColor }) => {
   const [isHovered, setIsHovered] = React.useState(false);
-
-  const getScore = (countryName: string) => scores[countryName] as Score | null;
-
-  const getBgColor = (countryName: string) => {
-    const score = getScore(countryName);
-
-    return score ? getBackgroundColor(score) : DEFAULT_BG_COLOR;
-  };
 
   const parsedGeometry = pointSchema.parse(geo.geometry);
 
@@ -110,7 +109,7 @@ const Point: React.FC<MapPartFeature> = ({ geo, scores, onClick }) => {
     >
       <circle
         r={1.5}
-        fill={darken(getBgColor(geo.properties.name), isHovered ? 15 : 0)}
+        fill={darken(bgColor, isHovered ? 15 : 0)}
         stroke="#000"
         strokeWidth="0.1"
       />
@@ -119,13 +118,49 @@ const Point: React.FC<MapPartFeature> = ({ geo, scores, onClick }) => {
 };
 
 export const MapFeature: React.FC<MapFeature> = ({ geo, scores, onClick }) => {
+  const [bgColor, setBgColor] = React.useState(DEFAULT_BG_COLOR);
+
   const geoParsed = geoSchema.parse(geo);
+
+  const getScore = (countryName: string) => scores[countryName] as Score | null;
+
+  React.useEffect(() => {
+    const score = getScore(geoParsed.properties.name);
+    if (!score) return;
+
+    if (score.tries >= 5 && score.status === "active") {
+	  setBgColor(INCORRECT_BG_COLOR);
+      const interval = setInterval(() => {
+        setBgColor((prev) =>
+          prev === DEFAULT_BG_COLOR ? INCORRECT_BG_COLOR : DEFAULT_BG_COLOR,
+        );
+      }, 500);
+      return () => clearInterval(interval);
+    } else if (score.tries >= 5 && score.status === "solved") {
+		setBgColor(INCORRECT_BG_COLOR);
+	} else if (score.tries >= 2 && score.status === "solved") {
+      setBgColor(WARNING_BG_COLOR);
+    } else if (score.status === "solved") {
+      setBgColor(CORRECT_BG_COLOR);
+    } else {
+      setBgColor(DEFAULT_BG_COLOR);
+    }
+  }, [scores]);
 
   switch (geoParsed.geometry.type) {
     case "Point":
-      return <Point geo={geo} scores={scores} onClick={onClick} />;
+      return (
+        <Point geo={geo} scores={scores} onClick={onClick} bgColor={bgColor} />
+      );
     case "MultiPolygon":
     case "Polygon":
-      return <Polygon geo={geo} scores={scores} onClick={onClick} />;
+      return (
+        <Polygon
+          geo={geo}
+          scores={scores}
+          onClick={onClick}
+          bgColor={bgColor}
+        />
+      );
   }
 };
