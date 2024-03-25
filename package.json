@@ -12,12 +12,15 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-simple-maps": "^3.0.0",
+    "react-svg-map": "^2.2.0",
     "react-zoom-pan-pinch": "^3.4.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/react-simple-maps": "^3.0.4",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",

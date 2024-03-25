@@ -1,55 +1,64 @@
-import "react";
-import { useEffect, useRef, useState } from "react";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import React, { useState } from "react";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  ZoomableGroup,
+} from "react-simple-maps";
+import { z } from "zod";
 
-interface MapProps {
-  onClick: (country: string) => void;
+const geoSchema = z.object({
+  properties: z.object({
+    name: z.string(),
+  }),
+});
+
+interface WorldMapProps {
+  currentCountry: string;
+  onCorrect: () => void;
+  onIncorrect: () => void;
 }
 
-export const Map: React.FC<MapProps> = ({ onClick }) => {
-  const element = useRef<HTMLDivElement | null>(null);
-  const [vectorGraphic, setVectorGraphic] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/world.svg")
-      .then((r) => r.text())
-      .then(setVectorGraphic);
-  }, []);
-
-  useEffect(() => {
-    if (!vectorGraphic) return;
-    if (!element.current) return;
-
-    element.current.innerHTML = vectorGraphic;
-    element.current.getElementsByTagName("svg")[0].style.width = "100%";
-    element.current.getElementsByTagName("svg")[0].style.height = "auto";
-
-    element.current.querySelectorAll("path").forEach((path) => {
-      path.addEventListener("click", () => {
-        const name = path.getAttribute("class") || path.getAttribute("name");
-        if (!name) return;
-
-        onClick(name);
-      });
-    });
-  }, [vectorGraphic, element]);
+export const Map: React.FC<WorldMapProps> = (props) => {
+  const [defaultBgColor, setDefaultBgColor] = useState("#D6D6DA");
+  const [hoverBgColor, setHoverBgColor] = useState("#a3a3a6");
+  const [hoverCursor, setHoverCursor] = useState("pointer");
 
   return (
-    <div>
-      <TransformWrapper>
-        <TransformComponent>
-          <div
-            style={{
-              height: "100vh",
-              width: "100%",
-			  paddingTop: "1rem",
-              padding: "4rem",
-            }}
-          >
-            <div ref={element} style={{ width: "100%", height: "100%" }} />;
-          </div>
-        </TransformComponent>
-      </TransformWrapper>
+    <div
+      style={{
+        maxHeight: "100vh",
+        outline: "1px solid red",
+        overflow: "hidden",
+      }}
+    >
+      <ComposableMap>
+        <ZoomableGroup>
+          <Geographies geography="/features.json">
+            {({ geographies }) =>
+              geographies.map((geo) => (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  onClick={() => {
+                    const name = geoSchema.parse(geo).properties.name;
+
+                    if (name === props.currentCountry) {
+                      props.onCorrect();
+                    } else {
+						props.onIncorrect();
+					}
+                  }}
+                  style={{
+                    default: { fill: defaultBgColor, stroke: "#000", strokeWidth: 0.1 },
+                    hover: { fill: hoverBgColor, cursor: hoverCursor },
+                  }}
+                />
+              ))
+            }
+          </Geographies>
+        </ZoomableGroup>
+      </ComposableMap>
     </div>
   );
 };
