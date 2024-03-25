@@ -252,7 +252,7 @@
           "type": "Polygon",
           "arcs": [[-12, 227, 228, -216, -128, -225]],
           "id": "COG",
-          "properties": { "name": "Republic Of Congo" }
+          "properties": { "name": "Republic of the Congo" }
         },
         {
           "type": "Polygon",
@@ -1204,7 +1204,7 @@
           "type": "MultiPolygon",
           "arcs": [[[731]], [[732]], [[733]], [[734]], [[735]]],
           "id": "FSM",
-          "properties": { "name": "Micronesia (country)" }
+          "properties": { "name": "Micronesia" }
         },
         {
           "type": "Polygon",

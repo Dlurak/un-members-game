@@ -5,16 +5,27 @@ import { useEffect, useState } from "react";
 import { Country, getCountries } from "./utils/countries";
 import { shuffle } from "./utils/arrays/random";
 import { Score, Status } from "./types";
+import LoadingScreen from "./components/screens/Loading";
+import GameOverScreen from "./components/screens/GameOver";
 
 function App() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [scores, setScores] = useState<Record<string, Score>>({});
+  const [startTimestamp, setStartTimestamp] = useState<number | null>(null);
+  const [status, setStatus] = useState<"loading" | "playing" | "finished">(
+    "loading",
+  );
 
   useEffect(() => {
     getCountries().then((data) => {
       setCountries(shuffle(data));
+      setStatus("playing");
     });
   }, []);
+
+  useEffect(() => {
+    if (!startTimestamp) setStartTimestamp(Date.now());
+  }, [scores, countries]);
 
   const incrementScore = (country: string, status: Status, amount = 1) => {
     const countryScore = scores[country]?.tries || 0;
@@ -26,16 +37,33 @@ function App() {
     setScores(scoreCopy);
   };
 
-  if (!countries.length || !countries[0]?.name.common) {
-    return <div>Loading...</div>;
+  if (status === "loading") return <LoadingScreen />;
+  if (status === "finished") {
+    return (
+      <GameOverScreen
+        startNewGame={() => {
+          setStatus("loading");
+          getCountries().then((data) => {
+            setScores({});
+            setStartTimestamp(Date.now());
+            setCountries(shuffle(data));
+            setStatus("playing");
+          });
+        }}
+        gameStartTimestamp={startTimestamp!}
+      />
+    );
   }
+
   return (
     <>
       <Map
         currentCountry={countries[0]?.name.common}
         scores={scores}
         onCorrect={() => {
-          setCountries(countries.slice(1));
+          const newCountries = countries.slice(1);
+          if (newCountries.length === 0) setStatus("finished");
+          setCountries(newCountries);
           incrementScore(countries[0].name.common, "solved");
         }}
         onIncorrect={() => {
