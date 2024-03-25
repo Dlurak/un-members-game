@@ -41,12 +41,6 @@
           "properties": { "name": "Armenia" }
         },
         {
-          "type": "Polygon",
-          "arcs": [[36]],
-          "id": "ATF",
-          "properties": { "name": "French Southern Territories" }
-        },
-        {
           "type": "MultiPolygon",
           "arcs": [[[37]], [[38]]],
           "id": "AUS",
@@ -298,15 +292,9 @@
         },
         {
           "type": "MultiPolygon",
-          "arcs": [[[255]], [[-251, 256]]],
+          "arcs": [[[255]], [[-251, 256]], [[257]]],
           "id": "DNK",
           "properties": { "name": "Denmark" }
-        },
-        {
-          "type": "MultiPolygon",
-          "arcs": [[[257]]],
-          "id": "GRL",
-          "properties": { "name": "Greenland" }
         },
         {
           "type": "Polygon",
@@ -372,15 +360,15 @@
         },
         {
           "type": "MultiPolygon",
-          "arcs": [[[305]], [[306, -247, -169, 307, 308, -282, 309, -63]]],
+          "arcs": [
+            [[305]],
+            [[306, -247, -169, 307, 308, -282, 309, -63]],
+            [[36]],
+            [[310, 311, 312, -112]],
+			[[523]]
+          ],
           "id": "FRA",
           "properties": { "name": "France" }
-        },
-        {
-          "type": "Polygon",
-          "arcs": [[310, 311, 312, -112]],
-          "id": "GUF",
-          "properties": { "name": "French Guiana" }
         },
         {
           "type": "Polygon",
@@ -524,7 +512,10 @@
         },
         {
           "type": "Polygon",
-          "arcs": [[402, 403, 404, 405, 406, 407], [-404, -417]],
+          "arcs": [
+            [402, 403, 404, 405, 406, 407],
+            [-404, -417]
+          ],
           "id": "ISR",
           "properties": { "name": "Israel" }
         },
@@ -649,7 +640,10 @@
         },
         {
           "type": "Polygon",
-          "arcs": [[-265, 474, 475], [-475, -264, -511, 622]],
+          "arcs": [
+            [-265, 474, 475],
+            [-475, -264, -511, 622]
+          ],
           "id": "MAR",
           "properties": { "name": "Morocco" }
         },
@@ -730,12 +724,6 @@
           "arcs": [[520, -8, 521, -120, 522]],
           "id": "NAM",
           "properties": { "name": "Namibia" }
-        },
-        {
-          "type": "Polygon",
-          "arcs": [[523]],
-          "id": "NCL",
-          "properties": { "name": "New Caledonia" }
         },
         {
           "type": "Polygon",
@@ -830,12 +818,6 @@
           "arcs": [[-246, 560, 561, -472, -98, 562, 563, -243]],
           "id": "POL",
           "properties": { "name": "Poland" }
-        },
-        {
-          "type": "Polygon",
-          "arcs": [[564]],
-          "id": "PRI",
-          "properties": { "name": "Puerto Rico" }
         },
         {
           "type": "Polygon",
@@ -953,7 +935,10 @@
         },
         {
           "type": "Polygon",
-          "arcs": [[-83, -483, -451, -491, -88, 649, -355, 650, -364, -574], [447, 448, 449, 450, 451]],
+          "arcs": [
+            [-83, -483, -451, -491, -88, 649, -355, 650, -364, -574],
+            [447, 448, 449, 450, 451]
+          ],
           "id": "SRB",
           "properties": { "name": "Serbia" }
         },
@@ -1096,7 +1081,8 @@
             [[699]],
             [[700]],
             [[701]],
-            [[-144, 702, -142, 703]]
+            [[-144, 702, -142, 703]],
+			[[564]]
           ],
           "id": "USA",
           "properties": { "name": "United States" }
@@ -1120,8 +1106,8 @@
           "properties": { "name": "Vietnam" }
         },
         {
-          "type": "MultiPolygon",
-          "arcs": [[[706]], [[707]]],
+          "type": "Point",
+          "coordinates": [168.2480, -16.7090],
           "id": "VUT",
           "properties": { "name": "Vanuatu" }
         },
@@ -1164,6 +1150,12 @@
           "id": "CPV",
           "properties": { "name": "Cape Verde" }
         },
+		{
+			"type": "Point",
+			"coordinates": [-23.51056, 14.91599],
+			"id": "CPV_POINT",
+			"properties": { "name": "Cape Verde" }
+		},
         {
           "type": "MultiPolygon",
           "arcs": [[[721]], [[722]], [[723]]],
@@ -1312,7 +1304,7 @@
         },
         {
           "type": "Point",
-		  "coordinates": [7.42479,43.73111],
+          "coordinates": [7.42479, 43.73111],
           "id": "MCO",
           "properties": { "name": "Monaco" }
         },
