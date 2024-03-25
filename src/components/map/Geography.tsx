@@ -11,11 +11,14 @@ import { z } from "zod";
 import { darken } from "../../utils/colors/darken";
 
 const coordSchema = z.tuple([z.number(), z.number()]);
-const polygonCoords = z.array(
-  z.array(
-    z.union([coordSchema, z.array(coordSchema), z.array(z.array(coordSchema))]),
-  ),
-);
+const oneDimCoordSchema = z.array(coordSchema);
+const twoDimCoordSchema = z.array(oneDimCoordSchema);
+const threeDimCoordSchema = z.array(twoDimCoordSchema);
+const polygonCoords = z.union([
+	oneDimCoordSchema,
+	twoDimCoordSchema,
+	threeDimCoordSchema,
+])
 const pointCoords = coordSchema;
 
 const pointSchema = z.object({
@@ -27,7 +30,7 @@ const polygonSchema = z.object({
   coordinates: polygonCoords,
 });
 
-const geoSchema = z.object({
+export const geoSchema = z.object({
   properties: z.object({
     name: z.string(),
   }),
@@ -36,7 +39,7 @@ const geoSchema = z.object({
   svgPath: z.string(),
 });
 
-type Geo = z.infer<typeof geoSchema>;
+export type Geo = z.infer<typeof geoSchema>;
 type MapFeatureBase<T> = {
   geo: T;
   scores: Record<string, Score>;
@@ -119,7 +122,7 @@ const Point: React.FC<MapPartFeature> = ({ geo, onClick, bgColor }) => {
   );
 };
 
-export const MapFeature: React.FC<MapFeature> = ({ geo, scores, onClick }) => {
+export const InnerMapFeature: React.FC<MapFeature> = ({ geo, scores, onClick }) => {
   const [bgColor, setBgColor] = React.useState(DEFAULT_BG_COLOR);
 
   const geoParsed = geoSchema.parse(geo);
