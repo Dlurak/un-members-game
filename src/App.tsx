@@ -4,25 +4,27 @@ import { QuestionBox } from "./components/QuestionBox";
 import { useEffect, useState } from "react";
 import { Country, getCountries } from "./utils/countries";
 import { shuffle } from "./utils/arrays/random";
+import { Score, Status } from "./types";
+
+
 
 function App() {
   const [countries, setCountries] = useState<Country[]>([]);
-  const [scores, setScores] = useState<Record<string, number>>({});
+  const [scores, setScores] = useState<Record<string, Score>>({});
 
   useEffect(() => {
     getCountries().then((data) => {
       setCountries(shuffle(data));
-
-      for (const country of countries) {
-        scores[country.name.common] = 0;
-      }
     });
   }, []);
 
-  const incrementScore = (country: string) => {
-    const countryScore = scores[country] || 0;
+  const incrementScore = (country: string, status: Status) => {
+    const countryScore = scores[country]?.tries || 0;
     const scoreCopy = { ...scores };
-    scoreCopy[country] = countryScore + 1;
+    scoreCopy[country] = {
+		tries: countryScore + 1,
+		status
+	};
     setScores(scoreCopy);
   };
 
@@ -33,16 +35,13 @@ function App() {
     <>
       <Map
         currentCountry={countries[0]?.name.common}
+		scores={scores}
         onCorrect={() => {
-          window.alert("Correct!");
           setCountries(countries.slice(1));
-
-          incrementScore(countries[0].name.common);
+          incrementScore(countries[0].name.common, "solved");
         }}
         onIncorrect={() => {
-          window.alert("Incorrect!");
-
-          incrementScore(countries[0].name.common);
+          incrementScore(countries[0].name.common, "active");
         }}
       />
       <QuestionBox
