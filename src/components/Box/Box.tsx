@@ -7,10 +7,9 @@ interface BoxProps {
 export const Box: React.FC<BoxProps> = (props) => (
   <div
     className="absolute rounded-lg bottom-12 left-1/2 -translate-x-1/2 w-11/12
-	flex flex-col md:flex-row gap-2"
+	flex flex-col md:flex-row gap-2 backdrop-blur-md"
     style={{
       background: "rgba(255, 255, 255, 0.5)",
-      backdropFilter: "blur(10px)",
 
       justifyContent: "space-evenly",
       alignItems: "center",
